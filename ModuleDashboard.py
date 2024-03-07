@@ -3,14 +3,29 @@ import re
 import tkinter as tk #for GUI
 from tkinter.constants import DISABLED, NORMAL # for button states
 
+# Function that takes number grade and converts it to a letter grade
+def convertToLetter(number):
+	if number <= 50:
+		letter = 'F'
+	elif number <= 64:
+		letter = 'P'
+	elif number <= 74:
+		letter = 'C'
+	elif number <= 84:
+		letter = 'D'
+	else: letter = 'HD'
+	
+	return letter
+	
 def saveinfo():
 	valor1 = sub_code.get()
 	valor2 = sub_name.get()
 	valor3 = sub_grade.get()
-	df.loc[len(df.index)] = [valor1.upper(), valor2.title(), valor3]
+	valor4 = convertToLetter(int(valor3))
+	df.loc[len(df.index)] = [valor1.upper(), valor2.title(), valor3, valor4]
 	# Remove the first row (empty)
 	#df = df.iloc[1:, :]
-	df.to_csv("pandas.csv", sep=',')
+	df.to_csv("pandas.csv", sep=',', index=False)
 	
 # Function that checks for a regex match
 def checkRegex(user_input):
@@ -24,7 +39,7 @@ def opennewwindow():
 	
 	# tkinter window details
 	window = tk.Tk()
-	window.geometry("500x300")
+	window.geometry("600x300")
 	window.title("Module Dashboard")
 	
 	b1 = tk.Button(window, text="Add", command=lambda: [saveinfo(), clearboxes()]).grid(column=2, row=2)
@@ -52,55 +67,27 @@ def clearboxes():
 	
 def displaypopup():
 	window = tk.Tk()
-	window.geometry("800x500")
+	window.geometry('600x300')
 	window.title("Display Database")
 	
-	text_box = tk.Text(window)
+	text_box = tk.Text(window, height=10, pady=4)
+	wam_box = tk.Text(window, height=2, pady=4)
 	df2 = pd.read_csv("pandas.csv")
+	df2 = df2.iloc[1:, :]
 	text_box.insert(tk.END, df2.to_string())
+	wam_box.insert(tk.END, "Total grade: {}".format(df2["Subject Grade"].sum()))
 	text_box.pack()
+	wam_box.pack()
+	
+	
 	
 
 	
 # ------------ MAIN ---------------
 
-df = pd.DataFrame({"Subject Code": [None], "Subject Name": [None], "Subject Grade": 0})
+df = pd.DataFrame({"Subject Code": [None], "Subject Name": [None], "Subject Grade": 0, "Letter": [None]})
 opennewwindow()
 displaypopup()
-
-
-
-	
-## Function that takes number grade and converts it to a letter grade
-#def convertToLetter(number):
-#	if number <= 50:
-#		letter = 'F'
-#	elif number <= 64:
-#		letter = 'P'
-#	elif number <= 74:
-#		letter = 'C'
-#	elif number <= 84:
-#		letter = 'D'
-#	else: letter = 'HD'
-#	
-#	return letter
-	
-## feature one: ask for student's mods infos and save to a csv file
-#def getDetails():
-#	while True:
-#		code = input().upper()
-#		if not checkRegex(code):
-#			break
-#		name = input()
-#		grade = int(input())
-#		df.loc[len(df.index)] = [code, name.title(), grade, convertToLetter(grade)]
-#
-## feature two: add grades and find WAM
-#
-#
-#getDetails()
-
-## output to a csv file
 
 #print(df)
 #total = df["Grade"].sum()
