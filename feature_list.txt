@@ -1,0 +1,11 @@
+Current features:
+* adding subjects into database
+* search for code and return name
+* display database with letter grade
+
+Planned features:
+* filter database
+* increase subject database
+
+Work-in-progress:
+* no WIP
