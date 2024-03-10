@@ -39,23 +39,22 @@ def opennewwindow():
 	window = tk.Tk()
 	window.geometry("600x300")
 	window.title("Module Dashboard")
-	sub_name_box = tk.Text(window, height=1, width=50)
+	sub_name_box = tk.Text(window, height=2, width=27)
 	sub_name_box.grid(column=1, row=4)
 	
 	b1 = tk.Button(window, text="Add", command=lambda: [saveinfo(), clearboxes()]).grid(column=3, row=2)
-	b2 = tk.Button(window, text="Show database", command=displaypopup).grid(column=3, row=3)
+	b2 = tk.Button(window, text="Delete", command=delete).grid(column=3, row=3)
 	b3 = tk.Button(window, text="Search", command=search).grid(column=2, row=2)
+	b4 = tk.Button(window, text="Show database", command=displaypopup).grid(column=3, row=4)
 	tk.Label(window, text="Enter the subject code:").grid(column=1, row=1)
 	sub_code = tk.Entry(window) # on row 2
 	
 	tk.Label(window, text="Subject Name:").grid(column=1, row=3)
 	
-	#sub_name = tk.Entry(window) # on row 4
 	tk.Label(window, text="Enter the grade achieved:").grid(column=1, row=5)
 	sub_grade = tk.Entry(window)
 	
 	sub_code.grid(column=1, row=2)
-	#sub_name.grid(column=1, row=4)
 	sub_grade.grid(column=1, row=6)
 	window.mainloop()
 
@@ -86,12 +85,19 @@ def search():
 	a = subject_db.loc[subject_db['Subject Code']==to_search.upper()]
 	b = a.iloc[0]["Subject Name"]
 	sub_name_box.insert(tk.END, b)
+	
+def delete():
+	to_delete = sub_code.get()
+	delete_row = df.index[df['Subject Code'] == to_delete.upper()]
+	#delete_row = df[df["Subject Code" == to_delete.upper()]].index
+	df.drop(delete_row, inplace=True)
+	df.to_csv("pandas.csv", sep=',', index=False)
 
 	
 # ------------ MAIN ---------------
 
 #df = pd.DataFrame({"Subject Code": [None], "Subject Name": [None], "Subject Grade": 0, "Letter": [None]})
-pd.read_csv("pandas.csv")
+df = pd.read_csv("pandas.csv")
 subject_db = pd.read_csv("subjects_database.csv")
 opennewwindow()
 
