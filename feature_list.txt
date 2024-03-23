@@ -4,8 +4,7 @@ Current features:
 * display database with letter grade
 
 Planned features:
-* filter database
-* increase subject database
+* 
 
 Work-in-progress:
-* no WIP
+* Move from using Pandas and CSV as a database to using MySQL database
